@@ -73,11 +73,11 @@ def display(l, s=3):
                 print("|  o   o  |", end=" " * s)
         print()
 
-        for n in l:
+        for _ in l:
             print("|         |", end=" " * s)
         print()
 
-        for n in l:
+        for _ in l:
             print("+---------+", end=" " * s)
         print()
 
