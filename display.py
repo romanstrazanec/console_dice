@@ -1,99 +1,50 @@
-from os import system
+from os import system, name
+from math import ceil
 from random import random
 
+from dice import Dice
 
-def cls():
-    system("cls")
+
+def clear_screen():
+    system("cls" if name == 'nt' else 'clear')
 
 
 def roll():
     return int(random() * 6) + 1
 
 
+def split_in_rows(l, n, print_func):
+    for i in range(0, len(l), n):
+        print_func(l[i:i + n])
+        print()
+
+
 def display(l, s=3):
     # print(type(l), print(l))
     if type(l) == int:
-        k = [roll() for _ in range(l + 1)]
-        display(k[:3])
-        print()
-        if l > 2:
-            display(k[3:])
+        rolled = [roll() for _ in range(l + 1)]
+        split_in_rows(rolled, ceil(len(rolled) ** .5), display)
 
     elif type(l) == list:
-        for _ in l:
-            print("+---------+", end=" " * s)
-        print()
-
-        for _ in l:
-            print("|         |", end=" " * s)
-        print()
-
-        for n in l:
-            if n == 1:
-                print("|         |", end=" " * s)
-            if n == 2:
-                print("|     o   |", end=" " * s)
-            if n == 3:
-                print("|     o   |", end=" " * s)
-            if n == 4:
-                print("|  o   o  |", end=" " * s)
-            if n == 5:
-                print("|  o   o  |", end=" " * s)
-            if n == 6:
-                print("|  o   o  |", end=" " * s)
-        print()
-
-        for n in l:
-            if n == 1:
-                print("|    o    |", end=" " * s)
-            if n == 2:
-                print("|         |", end=" " * s)
-            if n == 3:
-                print("|    o    |", end=" " * s)
-            if n == 4:
-                print("|         |", end=" " * s)
-            if n == 5:
-                print("|    o    |", end=" " * s)
-            if n == 6:
-                print("|  o   o  |", end=" " * s)
-        print()
-
-        for n in l:
-            if n == 1:
-                print("|         |", end=" " * s)
-            if n == 2:
-                print("|   o     |", end=" " * s)
-            if n == 3:
-                print("|   o     |", end=" " * s)
-            if n == 4:
-                print("|  o   o  |", end=" " * s)
-            if n == 5:
-                print("|  o   o  |", end=" " * s)
-            if n == 6:
-                print("|  o   o  |", end=" " * s)
-        print()
-
-        for _ in l:
-            print("|         |", end=" " * s)
-        print()
-
-        for _ in l:
-            print("+---------+", end=" " * s)
-        print()
+        for n_layer in range(len(Dice.layers)):
+            for n in l:
+                print(Dice(n).layer(n_layer), end=" " * s)
+            print()
 
 
 def play():
     n = 5
     while True:
         for _ in range(10):
-            cls()
+            clear_screen()
             display(n)
         print()
 
         i = input("[l]ose? | [q]uit? ")
         if i == "q":
-            cls()
+            clear_screen()
             break
+
         if i == "l":
             n = (n - 1) % 6
 
